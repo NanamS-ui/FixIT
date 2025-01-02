@@ -12,17 +12,16 @@ public class Composant {
     private String nom;
     private double prixAchat;
     private double prixVente;
-    private String idTypeComposant;
-
+    private String img;
     public Composant() {
     }
 
-    public Composant(String idComposant, String nom, double prixAchat, double prixVente, String idTypeComposant) {
+    public Composant(String idComposant, String nom, double prixAchat, double prixVente, String img) {
         this.idComposant = idComposant;
         this.nom = nom;
         this.prixAchat = prixAchat;
         this.prixVente = prixVente;
-        this.idTypeComposant = idTypeComposant;
+        this.img = img;
     }
 
     public String getIdComposant() {
@@ -57,12 +56,12 @@ public class Composant {
         this.prixVente = prixVente;
     }
 
-    public String getIdTypeComposant() {
-        return idTypeComposant;
+    public String getImg() {
+        return img;
     }
 
-    public void setIdTypeComposant(String idTypeComposant) {
-        this.idTypeComposant = idTypeComposant;
+    public void setImg(String img) {
+        this.img = img;
     }
 
     // Méthode pour récupérer tous les composants
@@ -74,10 +73,10 @@ public class Composant {
             while (rs.next()) {
                 composants.add(new Composant(
                         rs.getString("id_composant"),
-                        rs.getString("nom"),
+                        rs.getString("val"),
                         rs.getDouble("prix_achat"),
                         rs.getDouble("prix_vente"),
-                        rs.getString("id_type_composant")
+                        rs.getString("img")
                 ));
             }
         }
@@ -93,10 +92,10 @@ public class Composant {
                 if (rs.next()) {
                     return new Composant(
                             rs.getString("id_composant"),
-                            rs.getString("nom"),
+                            rs.getString("val"),
                             rs.getDouble("prix_achat"),
                             rs.getDouble("prix_vente"),
-                            rs.getString("id_type_composant")
+                            rs.getString("img")
                     );
                 }
             }
@@ -106,25 +105,25 @@ public class Composant {
 
     // Méthode pour insérer un nouveau composant
     public void insert(Connection connection) throws SQLException {
-        String query = "INSERT INTO Composant (id_composant, nom, prix_achat, prix_vente, id_type_composant) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Composant (id_composant, nom, prix_achat, prix_vente, img) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, this.idComposant);
             pstmt.setString(2, this.nom);
             pstmt.setDouble(3, this.prixAchat);
             pstmt.setDouble(4, this.prixVente);
-            pstmt.setString(5, this.idTypeComposant);
+            pstmt.setString(5, this.img);
             pstmt.executeUpdate();
         }
     }
 
     // Méthode pour mettre à jour un composant existant
     public void update(Connection connection, String id) throws SQLException {
-        String query = "UPDATE Composant SET nom = ?, prix_achat = ?, prix_vente = ?, id_type_composant = ? WHERE id_composant = ?";
+        String query = "UPDATE Composant SET nom = ?, prix_achat = ?, prix_vente = ?, img = ? WHERE id_composant = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, this.nom);
             pstmt.setDouble(2, this.prixAchat);
             pstmt.setDouble(3, this.prixVente);
-            pstmt.setString(4, this.idTypeComposant);
+            pstmt.setString(4, this.img);
             pstmt.setString(5, id);
             pstmt.executeUpdate();
         }

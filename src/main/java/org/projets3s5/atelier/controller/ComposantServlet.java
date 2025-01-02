@@ -1,6 +1,7 @@
-package org.projets3s5.atelier.Controleur;
+package org.projets3s5.atelier.controller;
 
 import org.projets3s5.atelier.model.Composant;
+import org.projets3s5.atelier.utils.DatabaseUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,40 +16,42 @@ import java.util.List;
 @WebServlet("/composants")
 public class ComposantServlet extends HttpServlet {
 
-    // Méthode qui traite la requête
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Connexion à la base de données
-        Connection connection = null;  // Assurez-vous d'avoir une connexion valide ici
-
+        Connection connection = null;
         try {
-            // Récupération de la liste des composants
+            connection = DatabaseUtil.getConnectionPostgre();
             List<Composant> composants = Composant.getAll(connection);
 
-            // Ajouter la liste des composants à l'objet requête
             request.setAttribute("composants", composants);
 
-            // Dispatch vers la JSP pour afficher les composants
-            // Nous utilisons request.getRequestDispatcher pour rediriger vers une page JSP
-            request.getRequestDispatcher("/WEB-INF/afficherComposants.jsp").forward(request, response);
+            request.getRequestDispatcher("/temp/front_Office/pages/accueil.jsp").forward(request, response);
 
         } catch (SQLException e) {
             e.printStackTrace();
-            // Si une exception se produit, envoyer une erreur
-            request.setAttribute("error", "Une erreur est survenue lors de la récupération des composants.");
+            request.setAttribute("error", "Une erreur est survenue lors de la récupération des composants :" +e.getMessage());
             request.getRequestDispatcher("/WEB-INF/error.jsp").forward(request, response);
+        }
+        finally {
+            try {
+                if (connection != null){
+                    connection.close();
+                }
+            }
+            catch (Exception e){
+                request.setAttribute("error", "Une erreur est survenue lors du la fermeture connection :" +e.getMessage());
+                request.getRequestDispatcher("/WEB-INF/error.jsp").forward(request, response);
+            }
         }
     }
 
-    // Méthode doGet pour gérer les requêtes GET
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    // Méthode doPost pour gérer les requêtes POST
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
