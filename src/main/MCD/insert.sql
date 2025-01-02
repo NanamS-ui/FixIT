@@ -90,3 +90,16 @@ INSERT INTO MvtStock (date_mouvement, entree, sortie, type_mvt, id_achat, id_com
                                                                                             (CURRENT_DATE, 20, 0, 'Entree', (SELECT id_achat FROM Achat WHERE quantite=20), (SELECT id_composant FROM Composant WHERE nom='Barrette RAM 8GB')),
                                                                                             (CURRENT_DATE, 10, 0, 'Entree', (SELECT id_achat FROM Achat WHERE quantite=10), (SELECT id_composant FROM Composant WHERE nom='SSD 512GB')),
                                                                                             (CURRENT_DATE, 0, 1, 'Sortie', NULL, (SELECT id_composant FROM Composant WHERE nom='Barrette RAM 8GB'));
+
+
+
+
+
+-- Insertion des données dans la table Composant
+INSERT INTO Composant (val, img, prix_achat, prix_vente) VALUES
+ ('Processeur', 'processeur.png', 150.00, 200.00),
+ ('Mémoire RAM', 'memoire_ram.png', 40.00, 60.00),
+ ('Disque dur', 'disque_dur.png', 50.00, 80.00),
+ ('Carte graphique', 'carte_graphique.png', 250.00, 300.00),
+ ('Disque HDD', 'HDD.png', 60.00, 80.00),
+ ('Disque SSD', 'SDD.png', 80.00, 100.00);
