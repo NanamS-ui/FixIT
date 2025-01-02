@@ -10,29 +10,30 @@ import java.util.List;
 public class ReparationDetails {
     private String idReparationDetails;
     private double prixReparation;
-    private short quantiteUtilisee;
+    private int quantiteUtilisee;
+    private String idEmploye;
     private String idTypeReparation;
     private String idComposant;
-    private String idTechnicien;
     private String idProbleme;
     private String idReparation;
 
-    public ReparationDetails() {
-    }
+    // Constructeurs
+    public ReparationDetails() {}
 
-    public ReparationDetails(String idReparationDetails, double prixReparation, short quantiteUtilisee,
-                             String idTypeReparation, String idComposant, String idTechnicien,
+    public ReparationDetails(String idReparationDetails, double prixReparation, int quantiteUtilisee,
+                             String idEmploye, String idTypeReparation, String idComposant,
                              String idProbleme, String idReparation) {
         this.idReparationDetails = idReparationDetails;
         this.prixReparation = prixReparation;
         this.quantiteUtilisee = quantiteUtilisee;
+        this.idEmploye = idEmploye;
         this.idTypeReparation = idTypeReparation;
         this.idComposant = idComposant;
-        this.idTechnicien = idTechnicien;
         this.idProbleme = idProbleme;
         this.idReparation = idReparation;
     }
 
+    // Getters et Setters
     public String getIdReparationDetails() {
         return idReparationDetails;
     }
@@ -49,12 +50,20 @@ public class ReparationDetails {
         this.prixReparation = prixReparation;
     }
 
-    public short getQuantiteUtilisee() {
+    public int getQuantiteUtilisee() {
         return quantiteUtilisee;
     }
 
-    public void setQuantiteUtilisee(short quantiteUtilisee) {
+    public void setQuantiteUtilisee(int quantiteUtilisee) {
         this.quantiteUtilisee = quantiteUtilisee;
+    }
+
+    public String getIdEmploye() {
+        return idEmploye;
+    }
+
+    public void setIdEmploye(String idEmploye) {
+        this.idEmploye = idEmploye;
     }
 
     public String getIdTypeReparation() {
@@ -73,14 +82,6 @@ public class ReparationDetails {
         this.idComposant = idComposant;
     }
 
-    public String getIdTechnicien() {
-        return idTechnicien;
-    }
-
-    public void setIdTechnicien(String idTechnicien) {
-        this.idTechnicien = idTechnicien;
-    }
-
     public String getIdProbleme() {
         return idProbleme;
     }
@@ -97,29 +98,23 @@ public class ReparationDetails {
         this.idReparation = idReparation;
     }
 
-    // Méthode pour récupérer tous les détails de réparation
-    public static List<ReparationDetails> getAll(Connection connection) throws SQLException {
-        String query = "SELECT * FROM ReparationDetails";
-        List<ReparationDetails> reparationDetailsList = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                reparationDetailsList.add(new ReparationDetails(
-                        rs.getString("id_reparation_details"),
-                        rs.getDouble("prix_reparation"),
-                        rs.getShort("quantite_utilisee"),
-                        rs.getString("id_type_reparation"),
-                        rs.getString("id_composant"),
-                        rs.getString("id_technicien"),
-                        rs.getString("id_probleme"),
-                        rs.getString("id_reparation")
-                ));
-            }
+    // Méthodes CRUD
+    public void insert(Connection connection) throws SQLException {
+        String query = "INSERT INTO ReparationDetails (id_reparation_details, prix_reparation, quantite_utilisee, id_employe, id_type_reparation, id_composant, id_probleme, id_reparation) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, this.idReparationDetails);
+            pstmt.setDouble(2, this.prixReparation);
+            pstmt.setInt(3, this.quantiteUtilisee);
+            pstmt.setString(4, this.idEmploye);
+            pstmt.setString(5, this.idTypeReparation);
+            pstmt.setString(6, this.idComposant);
+            pstmt.setString(7, this.idProbleme);
+            pstmt.setString(8, this.idReparation);
+            pstmt.executeUpdate();
         }
-        return reparationDetailsList;
     }
 
-    // Méthode pour récupérer les détails de réparation par ID
     public static ReparationDetails getById(Connection connection, String id) throws SQLException {
         String query = "SELECT * FROM ReparationDetails WHERE id_reparation_details = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -129,10 +124,10 @@ public class ReparationDetails {
                     return new ReparationDetails(
                             rs.getString("id_reparation_details"),
                             rs.getDouble("prix_reparation"),
-                            rs.getShort("quantite_utilisee"),
+                            rs.getInt("quantite_utilisee"),
+                            rs.getString("id_employe"),
                             rs.getString("id_type_reparation"),
                             rs.getString("id_composant"),
-                            rs.getString("id_technicien"),
                             rs.getString("id_probleme"),
                             rs.getString("id_reparation")
                     );
@@ -142,43 +137,43 @@ public class ReparationDetails {
         return null;
     }
 
-    // Méthode pour insérer un nouveau détail de réparation
-    public void insert(Connection connection) throws SQLException {
-        String query = "INSERT INTO ReparationDetails (id_reparation_details, prix_reparation, quantite_utilisee, " +
-                "id_type_reparation, id_composant, id_technicien, id_probleme, id_reparation) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, this.idReparationDetails);
-            pstmt.setDouble(2, this.prixReparation);
-            pstmt.setShort(3, this.quantiteUtilisee);
-            pstmt.setString(4, this.idTypeReparation);
-            pstmt.setString(5, this.idComposant);
-            pstmt.setString(6, this.idTechnicien);
-            pstmt.setString(7, this.idProbleme);
-            pstmt.setString(8, this.idReparation);
-            pstmt.executeUpdate();
+    public static List<ReparationDetails> getAll(Connection connection) throws SQLException {
+        String query = "SELECT * FROM ReparationDetails";
+        List<ReparationDetails> detailsList = new ArrayList<>();
+        try (PreparedStatement pstmt = connection.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                detailsList.add(new ReparationDetails(
+                        rs.getString("id_reparation_details"),
+                        rs.getDouble("prix_reparation"),
+                        rs.getInt("quantite_utilisee"),
+                        rs.getString("id_employe"),
+                        rs.getString("id_type_reparation"),
+                        rs.getString("id_composant"),
+                        rs.getString("id_probleme"),
+                        rs.getString("id_reparation")
+                ));
+            }
         }
+        return detailsList;
     }
 
-    // Méthode pour mettre à jour les détails de réparation
-    public void update(Connection connection, String id) throws SQLException {
-        String query = "UPDATE ReparationDetails SET prix_reparation = ?, quantite_utilisee = ?, " +
-                "id_type_reparation = ?, id_composant = ?, id_technicien = ?, id_probleme = ?, " +
-                "id_reparation = ? WHERE id_reparation_details = ?";
+    public void update(Connection connection) throws SQLException {
+        String query = "UPDATE ReparationDetails SET prix_reparation = ?, quantite_utilisee = ?, id_employe = ?, id_type_reparation = ?, id_composant = ?, id_probleme = ?, id_reparation = ? " +
+                "WHERE id_reparation_details = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setDouble(1, this.prixReparation);
-            pstmt.setShort(2, this.quantiteUtilisee);
-            pstmt.setString(3, this.idTypeReparation);
-            pstmt.setString(4, this.idComposant);
-            pstmt.setString(5, this.idTechnicien);
+            pstmt.setInt(2, this.quantiteUtilisee);
+            pstmt.setString(3, this.idEmploye);
+            pstmt.setString(4, this.idTypeReparation);
+            pstmt.setString(5, this.idComposant);
             pstmt.setString(6, this.idProbleme);
             pstmt.setString(7, this.idReparation);
-            pstmt.setString(8, id);
+            pstmt.setString(8, this.idReparationDetails);
             pstmt.executeUpdate();
         }
     }
 
-    // Méthode pour supprimer un détail de réparation
     public static void delete(Connection connection, String id) throws SQLException {
         String query = "DELETE FROM ReparationDetails WHERE id_reparation_details = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
