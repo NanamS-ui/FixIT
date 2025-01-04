@@ -32,7 +32,7 @@
         <li><a href="#services">Services</a></li>
         <li><a href="#contact">Contact</a></li>
     </ul>
-    <a href="<%= request.getContextPath()%>/login.jsp"><button class="login_btn">ADMIN</button></a>
+    <a href="<%= request.getContextPath()%>/temp/back_Office/pages/accueil.jsp"><button class="login_btn">ADMIN</button></a>
 </header>
 <!-- section Acceuil -->
 
