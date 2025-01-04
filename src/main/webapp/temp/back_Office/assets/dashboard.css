@@ -65,6 +65,52 @@ body {
 .menu a li{
     font-size: 1.2rem;
 }
+/* Style de base pour le menu */
+.dropdown {
+    position: relative;
+    color: #000; /* Couleur du texte pour le menu principal */
+}
+
+.dropdown-toggle {
+    color: #fff; /* Couleur du texte pour l'élément principal */
+    text-decoration: none;
+    padding: 10px 15px;
+    display: inline-block;
+}
+
+.dropdown-toggle:hover {
+    color: #ddd; /* Couleur au survol */
+}
+
+/* Style du sous-menu */
+.dropdown-menu {
+    display: none; /* Masqué par défaut */
+    position: absolute;
+    background-color: #333; /* Fond du sous-menu */
+    color: #fff; /* Couleur du texte du sous-menu */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 4px;
+    z-index: 1000;
+    margin: 0;
+    list-style: none;
+}
+
+.dropdown-menu li a {
+    color: #fff; /* Couleur du texte des liens */
+    text-decoration: none;
+    display: block;
+    padding: 5px 10px;
+}
+
+.dropdown-menu li a:hover {
+    background-color: #444; /* Couleur de fond au survol */
+    color: #fff; /* Couleur du texte au survol */
+}
+
+.dropdown-menu.show {
+    display: block; /* Affiche le sous-menu */
+}
 
 .logout {
     position: absolute;

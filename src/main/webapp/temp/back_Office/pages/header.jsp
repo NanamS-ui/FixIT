@@ -39,6 +39,17 @@
                     <span>Settings</span>
                 </a>
             </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Pages</span>
+                    <i class="fas fa-chevron-down"></i> <!-- Icône pour indiquer le menu déroulant -->
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Insertion</a></li>
+                    <li><a href="#">Tables</a></li>
+                </ul>
+            </li>
             <li class="logout">
                 <a href="#">
                     <i class="fas fa-sign-out-alt"></i>
@@ -48,7 +59,38 @@
         </ul>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropdown = document.querySelector(".dropdown");
+        const dropdownToggle = dropdown.querySelector(".dropdown-toggle");
+        const dropdownMenu = dropdown.querySelector(".dropdown-menu");
 
+        // Ajout d'un gestionnaire d'événement pour le clic
+        dropdownToggle.addEventListener("click", function (event) {
+            event.preventDefault(); // Empêcher le comportement par défaut du lien
+            const isOpen = dropdownMenu.classList.contains("show");
+
+            // Ajouter ou supprimer la classe 'show' pour afficher/masquer le menu
+            dropdownMenu.classList.toggle("show", !isOpen);
+
+            // Ajouter un style dynamique lorsque le menu est affiché
+            if (!isOpen) {
+                dropdownMenu.style.display = "block";
+            } else {
+                dropdownMenu.style.display = "none";
+            }
+        });
+
+        // Optionnel : Masquer le menu si l'utilisateur clique en dehors
+        document.addEventListener("click", function (event) {
+            if (!dropdown.contains(event.target)) {
+                dropdownMenu.classList.remove("show");
+                dropdownMenu.style.display = "none";
+            }
+        });
+    });
+
+</script>
 <!-- main content body-->
 <div class="main--content">
     <div class="header--wrapper">
